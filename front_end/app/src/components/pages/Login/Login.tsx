@@ -22,8 +22,6 @@ export const Login = () => {
           [name]: value,
         }));
       };
-
-    }
   return (
     <div>
       <div>
