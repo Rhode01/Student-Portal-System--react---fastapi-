@@ -1,26 +1,26 @@
 from fastapi import APIRouter, Depends
-from fastapi import  Depends
-from starlette.status import HTTP_401_UNAUTHORIZED
-from sqlalchemy.orm import Session
-from app.core.security.security import verify_password, create_access_token
+from fastapi.exceptions import HTTPException
+from sqlalchemy.ext.asyncio import AsyncSession
 from app.core.db.database import get_db
-from app.schemas.user_schema import UserLoginSchema
-from app.models.user import User
+from app.schemas.user_schema import UserLoginSchema,UserSchema
+from app.crud.user_crud import UserCRUD
 
-auth_router = APIRouter(prefix="/auth", tags=["Auth"])
+auth_router = APIRouter(prefix="/api/auth", tags=["Authentication"])
 
+@auth_router.post("/register")
+async def register_user(user: UserSchema, db: AsyncSession = Depends(get_db)):
+    crud = UserCRUD(db)
+    result = await crud.create_new(user)
+    if "error" in result:
+        raise HTTPException(status_code=400, detail=result["error"])
+    return result
 @auth_router.post("/login")
-
-def login_user(details: UserLoginSchema, db: Session = Depends(get_db)):
-        user = db.query(User).filter(
-            User.username == details.username
-        ).first()
-
-        if not user or not verify_password(details.password, user.password):
-            return {"error": "Invalid username or password", "status": HTTP_401_UNAUTHORIZED}
-
-        token = create_access_token({"sub": user.username})
-        return {"access_token": token, "token_type": "bearer"}
+async def login_user(credentials: UserLoginSchema, db: AsyncSession = Depends(get_db)):
+    crud = UserCRUD(db)
+    result = await crud.login_user(credentials)
+    if "error" in result:
+        raise HTTPException(status_code=401, detail=result["error"])
+    return result
     
 # @router.get("/me")
 # async def get_profile(current_user = Depends(get_current_user)):
