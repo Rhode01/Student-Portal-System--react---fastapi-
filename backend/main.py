@@ -4,7 +4,7 @@ from app.api.routes.router import api_router
 app = FastAPI(title="Student Portal API")
 
 origins = [
-    "http://localhost:3000"
+    "http://localhost:5173"
 ]
 
 app.add_middleware(
