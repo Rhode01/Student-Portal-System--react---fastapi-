@@ -1,7 +1,3 @@
-from pathlib import Path
-import sys
-# sys.path.append(str(Path(__file__).resolve().parents[0]))
-
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.api.routes.router import api_router
