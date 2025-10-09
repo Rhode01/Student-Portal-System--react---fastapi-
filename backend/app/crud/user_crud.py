@@ -20,7 +20,7 @@ class UserCRUD(BaseCRUD[User]):
         if existing_user:
             return {"error": "User already exists", "status": HTTP_400_BAD_REQUEST}
 
-        hashed_pwd = hash_password(details.password)
+        hashed_pwd = hash_password(str(details.password))
         new_user = self.model(
             username=details.username,
             password=hashed_pwd,
@@ -33,7 +33,7 @@ class UserCRUD(BaseCRUD[User]):
 
         return {"data": new_user, "status": HTTP_201_CREATED}
 
-    async def login_user(self, details: UserLoginSchema):
+    async def login_user(self, details: UserLoginSchema) -> dict:
         result = await self.db.execute(
             select(self.model).filter(self.model.username == details.username)
         )
