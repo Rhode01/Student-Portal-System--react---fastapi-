@@ -44,3 +44,10 @@ class UserCRUD(BaseCRUD[User]):
 
         token = create_access_token({"sub": user.username})
         return {"access_token": token, "token_type": "bearer"}
+
+    async def get_by_username(self, username):
+        result  = await self.db.execute(
+            select(self.model).filter(self.model.username== username)
+        )
+        user = result.scalar_one_or_none()
+        return user

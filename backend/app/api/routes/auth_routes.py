@@ -4,6 +4,8 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.core.db.database import get_db
 from app.schemas.user_schema import UserLoginSchema,UserSchema
 from app.crud.user_crud import UserCRUD
+from app.utils.protection import get_current_user
+from app.schemas.user_schema import UserOutSchema
 
 auth_router = APIRouter(prefix="/api/auth", tags=["Authentication"])
 
@@ -22,6 +24,6 @@ async def login_user(credentials: UserLoginSchema, db: AsyncSession = Depends(ge
         raise HTTPException(status_code=401, detail=result["error"])
     return result
     
-# @router.get("/me")
-# async def get_profile(current_user = Depends(get_current_user)):
-    # return current_user
+@auth_router.get("/me", response_model=UserOutSchema)
+async def get_profile(current_user = Depends(get_current_user)):
+    return current_user

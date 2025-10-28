@@ -10,10 +10,10 @@ class Settings(BaseSettings):
     POSTGRES_DB: str
     POSTGRES_PORT: str = "5432"
 
-    AUTH0_DOMAIN: str = None
-    AUTH0_CLIENT_ID: str = None
-    AUTH0_CLIENT_SECRET: str = None
-    AUTH0_API_AUDIENCE: str = None
+    AUTH0_DOMAIN: str 
+    AUTH0_CLIENT_ID: str 
+    AUTH0_CLIENT_SECRET: str 
+    AUTH0_API_AUDIENCE: str 
     
     SQLALCHEMY_DATABASE_URI: Union[PostgresDsn, None] = None
 

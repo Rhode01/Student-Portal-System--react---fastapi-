@@ -9,3 +9,9 @@ class UserSchema(BaseModel):
 class UserLoginSchema(BaseModel):
     username:str
     password:str
+class UserOutSchema(BaseModel):
+    id: int
+    username: str
+    role: str
+    class Config:
+        orm_mode = True
